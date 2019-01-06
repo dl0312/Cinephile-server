@@ -1,8 +1,83 @@
-type Greeting {
-  text: String!
-  error: Boolean!
+type EmailSignInResponse {
+  ok: Boolean!
+  error: String
+  token: String
+}
+
+type Mutation {
+  EmailSignIn(email: String!, password: String!): EmailSignInResponse!
+  EmailSignUp(email: String!, password: String!, nickName: String!, gender: String!, birthday: String!): EmailSignUpResponse!
+  FacebookConnect(firstName: String!, lastName: String!, nickName: String!, email: String, fbId: String!): FacebookConnectResponse!
+  GoogleConnect(firstName: String!, lastName: String!, nickName: String!, email: String, profilePhoto: String, googleId: String!): GoogleConnectResponse!
+}
+
+type EmailSignUpResponse {
+  ok: Boolean!
+  error: String
+  token: String
+}
+
+type FacebookConnectResponse {
+  ok: Boolean!
+  error: String
+  token: String
+}
+
+type GetMyProfileResponse {
+  ok: Boolean!
+  error: String
+  user: User
 }
 
 type Query {
-  sayHello: Greeting!
+  GetMyProfile: GetMyProfileResponse!
+}
+
+type GoogleConnectResponse {
+  ok: Boolean!
+  error: String
+  token: String
+}
+
+type User {
+  id: Int!
+  email: String
+  verifiedEmail: Boolean!
+  firstName: String
+  lastName: String
+  nickName: String!
+  fullName: String
+  birthday: String
+  gender: String
+  password: String
+  profilePhoto: String
+  fbId: String
+  googleId: String
+  # messagesAsSender: [Message]
+  messagesAsReceiver: [Message]
+  certification: Boolean
+  cinePoint: Int!
+  # achievements: [Achievement]
+  following: [User]
+  followers: [User]
+  followersCount: Int
+  followingCount: Int
+  # posts: [Post]
+  likesAsSender: [Clap]
+  likesAsReceiver: [Clap]
+  likesAsReceiverCount: Int
+  comments: [Comment]
+  notificationsAsReceiver: [Notification]
+  createdAt: String!
+  updatedAt: String
+}
+
+type Verification {
+  id: Int!
+  target: String!
+  payload: String!
+  key: String!
+  verified: Boolean!
+  createdAt: String!
+  updatedAt: String
 }

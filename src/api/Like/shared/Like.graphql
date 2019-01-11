@@ -1,0 +1,11 @@
+type Like {
+  id: Int!
+  senderId: Int
+  sender: User!
+  receiverId: Int
+  receiver: User!
+  postId: Int
+  post: Post
+  createdAt: String!
+  updatedAt: String
+}

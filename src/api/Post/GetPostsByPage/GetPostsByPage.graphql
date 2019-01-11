@@ -1,0 +1,10 @@
+type GetPostsByPageResponse {
+  ok: Boolean!
+  error: String
+  posts: [Post]!
+  maxPage: Int!
+}
+
+type Query {
+  GetPostsByPage(page: Int!): GetPostsByPageResponse!
+}

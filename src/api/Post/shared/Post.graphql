@@ -1,0 +1,13 @@
+type Post {
+  id: Int!
+  category: Int!
+  title: String!
+  source: String!
+  body: String!
+  userId: Int!
+  user: User!
+  view: Int!
+  tags: [String]
+  createdAt: String!
+  updatedAt: String
+}

@@ -2,31 +2,23 @@ type User {
   id: Int!
   email: String
   verifiedEmail: Boolean!
-  firstName: String
-  lastName: String
   nickName: String!
-  fullName: String
   birthday: String
   gender: String
   password: String
   profilePhoto: String
   fbId: String
   googleId: String
-  # messagesAsSender: [Message]
-  # messagesAsReceiver: [Message]
-  certification: Boolean
+  posts: [Post]
+  likesAsSender: [Like]
+  likesAsReceiver: [Like]
+  likesAsReceiverCount: Int
+  comments: [Comment]
   cinePoint: Int!
-  # achievements: [Achievement]
   following: [User]
   followers: [User]
   followersCount: Int
   followingCount: Int
-  #   posts: [Post]
-  #   likesAsSender: [Clap]
-  #   likesAsReceiver: [Clap]
-  #   likesAsReceiverCount: Int
-  #   comments: [Comment]
-  #   notificationsAsReceiver: [Notification]
   createdAt: String!
   updatedAt: String
 }

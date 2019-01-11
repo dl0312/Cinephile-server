@@ -12,14 +12,14 @@ import {
   // OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  RelationCount
+  RelationCount,
+  OneToMany,
+  JoinColumn
   // JoinColumn
 } from "typeorm";
-// import Clap from "./Clap";
-// import Comment from "./Comment";
-// import Message from "./Message";
-// import Notification from "./Notification";
-// import Post from "./Post";
+import Post from "./Post";
+import Like from "./Like";
+import Comment from "./Comment";
 
 const BCRYPT_ROUNDS = 10;
 
@@ -34,12 +34,6 @@ class User extends BaseEntity {
 
   @Column({ type: "boolean", default: false })
   verifiedEmail: boolean;
-
-  @Column({ type: "text", nullable: true })
-  firstName: string;
-
-  @Column({ type: "text", nullable: true })
-  lastName: string;
 
   @Column({ type: "text" })
   nickName: string;
@@ -71,8 +65,21 @@ class User extends BaseEntity {
   // @OneToMany(type => Message, message => message.receiver, { nullable: true })
   // messagesAsReceiver: Message[];
 
-  @Column({ type: "boolean", nullable: true })
-  certification: boolean;
+  @OneToMany(type => Post, post => post.user)
+  posts: Post[];
+
+  @OneToMany(type => Like, like => like.sender)
+  @JoinColumn()
+  likesAsSender: Like[];
+
+  @OneToMany(type => Like, like => like.receiver)
+  likesAsReceiver: Like[];
+
+  @RelationCount((user: User) => user.likesAsReceiver)
+  likesAsReceiverCount: number;
+
+  @OneToMany(type => Comment, commnet => commnet.user, { nullable: true })
+  comments: Comment[];
 
   @Column({ type: "int", default: 0 })
   cinePoint: number;
@@ -99,16 +106,6 @@ class User extends BaseEntity {
   //   @OneToMany(type => Post, post => post.user)
   //   posts: Post[];
 
-  //   @OneToMany(type => Clap, clap => clap.sender)
-  //   @JoinColumn()
-  //   likesAsSender: Clap[];
-
-  //   @OneToMany(type => Clap, clap => clap.receiver)
-  //   likesAsReceiver: Clap[];
-
-  //   @RelationCount((user: User) => user.clapsAsReceiver)
-  //   likesAsReceiverCount: number;
-
   //   @OneToMany(type => Comment, commnet => commnet.user, { nullable: true })
   //   comments: Comment[];
 
@@ -122,10 +119,6 @@ class User extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: string;
-
-  get fullName(): string {
-    return `${this.firstName} ${this.lastName}`;
-  }
 
   // Promise<number> ? number error need to fix
   // async clapPoint(): Promise<number> {

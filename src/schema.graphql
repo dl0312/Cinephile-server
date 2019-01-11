@@ -1,14 +1,131 @@
-type EmailSignInResponse {
+type AddCommentResponse {
   ok: Boolean!
   error: String
-  token: String
 }
 
 type Mutation {
+  AddComment(postId: Int!, parentCommentId: Int, body: String!, level: Int!): AddCommentResponse!
+  DeleteComment(commentId: Int!): DeleteCommentResponse!
+  EditComment(commentId: Int!, body: String!): EditCommentResponse!
+  SendClap(postId: Int!): SendClapResponse!
+  UnClap(postId: Int!): SendClapResponse!
+  AddPost(category: Int!, title: String!, source: String, tags: [String], body: String!): AddPostResponse!
+  DeletePost(postId: Int!): DeletePostResponse!
+  EditPost(postId: Int!, category: Int!, title: String!, source: String, tags: [String], body: String!): EditPostResponse!
   EmailSignIn(email: String!, password: String!): EmailSignInResponse!
   EmailSignUp(email: String!, password: String!, nickName: String!, gender: String!, birthday: String!): EmailSignUpResponse!
   FacebookConnect(firstName: String!, lastName: String!, nickName: String!, email: String, fbId: String!): FacebookConnectResponse!
   GoogleConnect(firstName: String!, lastName: String!, nickName: String!, email: String, profilePhoto: String, googleId: String!): GoogleConnectResponse!
+}
+
+type DeleteCommentResponse {
+  ok: Boolean
+  error: String
+}
+
+type EditCommentResponse {
+  ok: Boolean!
+  error: String
+}
+
+type GetCommentsByPostIdResponse {
+  ok: Boolean!
+  error: String
+  comments: [Comment]
+}
+
+type Query {
+  GetCommentsByPostId(postId: Int!): GetCommentsByPostIdResponse!
+  GetPostById(postId: Int!): GetPostByIdResponse!
+  GetPostsByPage(page: Int!): GetPostsByPageResponse!
+  GetMyProfile: GetMyProfileResponse!
+}
+
+type Comment {
+  id: Int!
+  body: String!
+  userId: Int
+  user: User!
+  postId: Int
+  post: Post!
+  parentComment: Comment
+  childrenComments: [Comment]
+  level: Int!
+  createdAt: String!
+  updatedAt: String
+}
+
+type SendClapResponse {
+  ok: Boolean!
+  error: String
+}
+
+type Like {
+  id: Int!
+  senderId: Int
+  sender: User!
+  receiverId: Int
+  receiver: User!
+  postId: Int
+  post: Post
+  createdAt: String!
+  updatedAt: String
+}
+
+type UnClapResponse {
+  ok: Boolean!
+  error: String
+}
+
+type AddPostResponse {
+  ok: Boolean!
+  error: String
+  postId: Int
+}
+
+type DeletePostResponse {
+  ok: Boolean!
+  error: String
+}
+
+type EditPostResponse {
+  ok: Boolean!
+  error: String
+}
+
+type GetPostByIdResponse {
+  ok: Boolean!
+  error: String
+  post: Post
+  isLiked: Boolean
+  isMine: Boolean
+}
+
+type GetPostsByPageResponse {
+  ok: Boolean!
+  error: String
+  posts: [Post]!
+  maxPage: Int!
+}
+
+type Post {
+  id: Int!
+  category: Int!
+  title: String!
+  source: String!
+  body: String!
+  userId: Int!
+  user: User!
+  view: Int!
+  tags: [String]
+  createdAt: String!
+  updatedAt: String
+}
+
+type EmailSignInResponse {
+  ok: Boolean!
+  error: String
+  token: String
 }
 
 type EmailSignUpResponse {
@@ -29,10 +146,6 @@ type GetMyProfileResponse {
   user: User
 }
 
-type Query {
-  GetMyProfile: GetMyProfileResponse!
-}
-
 type GoogleConnectResponse {
   ok: Boolean!
   error: String
@@ -43,31 +156,23 @@ type User {
   id: Int!
   email: String
   verifiedEmail: Boolean!
-  firstName: String
-  lastName: String
   nickName: String!
-  fullName: String
   birthday: String
   gender: String
   password: String
   profilePhoto: String
   fbId: String
   googleId: String
-  # messagesAsSender: [Message]
-  messagesAsReceiver: [Message]
-  certification: Boolean
+  posts: [Post]
+  likesAsSender: [Like]
+  likesAsReceiver: [Like]
+  likesAsReceiverCount: Int
+  comments: [Comment]
   cinePoint: Int!
-  # achievements: [Achievement]
   following: [User]
   followers: [User]
   followersCount: Int
   followingCount: Int
-  # posts: [Post]
-  likesAsSender: [Clap]
-  likesAsReceiver: [Clap]
-  likesAsReceiverCount: Int
-  comments: [Comment]
-  notificationsAsReceiver: [Notification]
   createdAt: String!
   updatedAt: String
 }
